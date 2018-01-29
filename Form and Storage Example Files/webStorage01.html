@@ -1,0 +1,109 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>HTML 5 Web Storage</title>
+
+<link href="reset.css" type="text/css" rel="stylesheet" />
+
+<link href="webStorage_Style.css" type="text/css" rel="stylesheet" />
+
+<script>
+    //when user clicks on the button it loads information from the function init
+window.addEventListener("load",init);
+
+function init(){
+	if(typeof(Storage)!=="undefined"){
+	
+	display();
+	
+	var button=document.getElementById("button");
+	button.addEventListener("click",saveInfo);
+	}
+	
+	else{
+	//old bowser	
+	}
+}
+//saves the information that is typed by the user
+function saveInfo(){
+	var city=document.getElementById("city").value;
+	var comments=document.getElementById("comments").value;
+    var filling=document.getElementById("filling").value;
+    var sprinkles=document.getElementById("sprinkles").value;
+	
+	localStorage.setItem("cityName",city);
+	localStorage.setItem("userComments",comments);
+    localStorage.setItem("typeFilling",filling);
+    localStorage.setItem("sprinkleType",sprinkles);
+	
+	
+	display();
+	
+}
+//displays the information that the user inputed
+function display(){
+	var rightBox=document.getElementById("useroutput");
+	var theCity=localStorage.getItem("cityName");
+	var theComments=localStorage.getItem("userComments");
+    var theFilling=localStorage.getItem("typeFilling");
+    var theSprinkles=localStorage.getItem("sprinkleType");
+	
+	if(theComments==undefined){
+		document.getElementById("useroutput").innerHTML="";
+	}
+	else{ document.getElementById("useroutput").innerHTML="OUTPUT  <hr /><br /><br />Donut Type: "+theCity+"<br /><br />  Glaze Flavor: "+theComments+
+        "<br /><br />Filling Flavor: "+theFilling+ "<br /><br />Sprinkles: " +theSprinkles;
+	}
+	
+}
+
+</script>
+
+
+
+</head>
+
+<body>
+<img src="7bd9b674e83f370a48e094d73b703ac1.jpg" alt="donut">
+    
+<div id="main">
+	<section id="userinput">
+    INPUT <br>
+	<hr />
+    <br /><br />
+    <form>
+    
+    <div>Donut Type: <br /><input type="input" id="city" size="20"></div>
+    <br />
+    <div>Flavor of Glaze :<br /> <textarea id="comments" rows="5"></textarea></div>
+    <br />
+    <div>Filling Flavor:<br /><input type="input" id="filling" size="20"></div>
+    <br />
+    <div>Sprinkles:<br /><input type="input" id="sprinkles" size="20"></div>
+    <br />
+        
+        
+        
+        
+        
+    <br />
+     <div><input type="button" id="button" value="Save"></div>
+   
+    
+    </form>
+    </section>
+    
+    
+    <section id="useroutput">
+ OUTPUT  
+ 	<hr />
+    <br /><br />
+    </section>
+
+</div>
+
+
+
+</body>
+</html>
