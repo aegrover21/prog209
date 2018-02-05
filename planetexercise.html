@@ -1,0 +1,52 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Untitled Document</title>
+</head>
+
+<body>
+
+<div id="main">
+
+</div> 
+
+<script>
+//variables that list the arrays
+var planetNames = ["Jupiter", "Venus", "Saturn", "Mars" , "Geronomo"];
+var distancesFromEarth = [5.2, 0.72, 9.5, 1.5, 2.2];
+var sunnyInAugust = [false, true, false, true , false];
+var main = document.getElementById("main");
+
+
+//loops through these arrays and displays the information for each planet
+for(var i = 0; i < planetNames.length; i++)
+{
+  console.log(planetNames[i]);
+  console.log(distancesFromEarth[i]);
+  console.log(sunnyInAugust[i]);
+  console.log("----------");
+    //write the information in the html main div
+  main.innerHTML = main.innerHTML +"<p style = color:red;><strong>"+planetNames[i]+"</p></strong>" + "<br />" + distancesFromEarth[i] + "<br />" + sunnyInAugust[i] + "<br />" + "----------" + "<br />";
+}
+     
+//Loop through the planetNames array and check whether each planet's matching sunnyInAugust information is true or false. Then just display the names of the sunny planets
+
+main.innerHTML = main.innerHTML + "<br />" + "These planets are sunny in August:";
+for(var i = 0; i < planetNames.length; i++)
+{
+  if(sunnyInAugust[i])
+  {
+    console.log(planetNames[i]);
+    //writes the information in the html div
+    main.innerHTML = main.innerHTML + "<br />" +planetNames[i];
+  }
+    
+  
+}
+
+
+</script>
+
+</body>
+</html>
