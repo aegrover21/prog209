@@ -1,0 +1,60 @@
+<!doctype html>
+<title>Drawing Sign in Canvas</title>
+<html>
+<body>
+   <canvas id="canvas" width="500" height="900">
+    </canvas>
+    
+</body>
+
+<script>
+var canvas = document.querySelector("#canvas");
+var ctx = canvas.getContext("2d");
+    
+ctx.save();			// save previous display state
+//  set drawing properties for the sign
+ctx.lineWidth = 32;	       		
+ctx.lineJoin = "round";	   
+ctx.strokeStyle = "blue";
+ctx.fillStyle = "blue";
+
+// create octagon linear path
+ctx.beginPath();
+ctx.moveTo(200, 100);
+ctx.lineTo(350, 100);
+ctx.lineTo(450, 200);
+ctx.lineTo(450, 350);
+ctx.lineTo(350, 450);
+ctx.lineTo(200, 450);
+ctx.lineTo(100, 350);
+ctx.lineTo(100, 200);
+ctx.closePath();
+
+
+// fill the sign and draw wide red lines
+ctx.fill();
+ctx.stroke();	
+
+// draw narrower white lines with white lines
+
+ctx.strokeStyle = "white";
+ctx.lineWidth = 5;
+ctx.stroke();
+
+// draw STOP text
+ctx.fillStyle  = "white";
+ctx.font = "bold 200px Arial";
+ctx.fillText( "P" ,230, 310);
+ctx.restore();		// restore previous display state
+   
+//Exit Sign
+ctx.translate(200,500);
+ctx.fillStyle = "red";
+ctx.fillRect(20,20,250,150);
+ctx.fillStyle  = "white";
+ctx.font = "bold 75px Arial";
+ctx.fillText( "EXIT" ,70, 110);
+
+</script>
+    
+</html>
