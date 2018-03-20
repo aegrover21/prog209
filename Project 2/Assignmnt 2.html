@@ -1,0 +1,119 @@
+
+<!doctype html>
+<title>Pony Island</title>
+
+<style>
+
+#stage
+{
+  position: relative;
+  width: 384px;
+  height: 384px;
+  background-image: url("../images/background.png");
+}
+
+.cell
+{
+  display: block;
+  position: absolute;
+  width: 64px;
+  height: 64px;
+}
+
+p
+{
+  width: 400px;
+}
+
+</style>
+
+<div id="main"></div>
+<p id="output"></p>
+
+<script>
+
+//Get a reference to the stage and output
+var main = document.querySelector("#main");
+var output = document.querySelector("#output");
+
+//The game map
+var map =
+[
+  [0, 2, 0, 0, 0, 3],
+  [0, 0, 0, 1, 0, 0],
+  [0, 1, 0, 0, 0, 0],
+  [0, 0, 0, 0, 2, 0],
+  [0, 2, 0, 1, 0, 0],
+  [0, 0, 0, 0, 0, 0]
+];
+
+//Map code
+var pinkie = 0;
+var spike = 1;
+var discord = 2;
+var home = 3;
+
+//The size of each cell
+var SIZE = 64;
+
+//The number of rows and columns
+var ROWS = map.length;
+var COLUMNS = map[0].length;
+
+render();
+
+function render()
+{
+  //Clear the stage of img tag cells
+  //from the previous turn
+
+  if(main.hasChildNodes())
+  {
+    for(var i = 0; i < ROWS * COLUMNS; i++)
+    {
+      stage.removeChild(stage.firstChild);
+    }
+  }
+
+  //Render the game by looping through the map arrays
+  for(var row = 0; row < ROWS; row++)
+  {
+    for(var column = 0; column < COLUMNS; column++)
+    {
+      //Create an img tag called cell
+      var cell = document.createElement("img");
+
+      //Set its CSS class to "cell"
+      cell.setAttribute("class", "cell");
+
+      //Add the img tag to the <div id="stage"> tag
+      main.appendChild(cell);
+
+      //Find the correct image for this map cell
+      switch(map[row][column])
+      {
+        case pinkie:
+          cell.src = "../../Images/pinkie.jpg";
+          break;
+
+        case spike:
+          cell.src = "images/spike.jpg";
+          break;
+
+        case discord:
+          cell.src = "../../Images/discord.jpg";
+          break;
+
+        case HOME:
+          cell.src = "images/home.jpg";
+          break;
+      }
+
+      //Position the cell
+      cell.style.top = row * SIZE + "px";
+      cell.style.left = column * SIZE + "px";
+    }
+  }
+}
+
+</script>

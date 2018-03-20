@@ -1,0 +1,551 @@
+<!doctype html>
+<title>Ponysville</title>
+<html>
+<head>
+    <title>Welcome to Ponysville</title>
+    <meta charset="utf-8">
+    <style>
+
+        #main
+            {
+              position: absolute;
+              width: 384px;
+              height: 384px;
+            
+               
+                
+            }
+        .cell
+            {
+              display: block;
+              position: absolute;
+              width: 64px;
+              height: 64px;
+            }
+        .startScreen{
+             position: relative;
+              width: 384px;
+              height: 384px;
+            display: block; 
+            
+            
+        }
+        
+        #gameStart
+        {
+            
+            display: none;
+            
+        }
+        #start
+        {
+            margin-left: 630px;
+           margin-top: 500px;
+          
+            
+        }
+         #spike
+        {
+            position: absolute;
+            right: 350px;
+            top: 50px;
+        }
+    
+        h1
+        {
+            font-family: fantasy;
+            color:mediumpurple;
+            position: relative;
+            text-align: center;
+        }
+        #screen
+        {
+            border: 3px dotted purple;
+            background-color: slategrey;
+            padding-bottom: 10px;
+        }
+
+    </style>
+ 
+</head>
+<body>
+   <div id="screen">
+    <section id="startScreen">
+    <img id="spike" src="images/spike.jpg" alt="spike">
+        <h1>Welcome to My Little Pony Adventure!!!</h1>
+    <button id="start">Click Me!!!</button>
+
+       </section>
+    </div>
+              
+       
+
+    
+    <section id = "gameStart">
+        
+    <p id="output"></p>
+    <div id = "main"></div>
+        
+    </section>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/1.19.0/plugins/CSSPlugin.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/1.19.0/easing/EasePack.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/1.19.0/TweenLite.min.js"></script>
+
+<script>
+    
+	//reference to main and output
+    var main = document.querySelector("#main");
+    var output = document.querySelector("#output");
+    var spikeImage = document.querySelector("#spike");
+    var startButton = document.querySelector("#start");
+    startButton.addEventListener("click", startGameHandler, false);
+    
+    function startGameHandler()
+    {
+        //hide into screen
+        gameObject
+        startScreen.style.display = "none";
+        gameStart.style.display = "block";
+//        spike.img.style.display = "block";
+    }
+    
+    TweenLite.to(spikeImage, 3, {rotation:360, left:400, ease:Bounce.easeOut, });
+
+    
+    //add keyboard listener
+    window.addEventListener("keydown", keydownHandler, false);
+
+    
+    //game map
+    var map =
+        [
+            [0,0,0,1,0,0,0,3],
+            [1,0,0,0,2,0,0,0],
+            [2,0,0,0,0,0,0,0],
+            [0,0,0,0,1,0,0,0],
+            [0,0,2,0,0,0,1,0],
+            [0,0,0,0,0,0,0,0],
+            [0,0,0,0,2,0,0,1],
+            [0,0,1,0,0,0,0,0]
+        ];
+    
+    //gameObjects map
+    var gameObject = 
+        [
+            [0,0,0,0,0,0,0,0],
+            [0,0,0,0,0,0,0,0],
+            [0,0,5,0,0,0,0,0],
+            [0,0,0,0,0,0,0,0],
+            [0,0,0,0,0,0,0,0],
+            [0,0,0,0,0,0,0,0],
+            [0,0,0,0,0,0,0,0],
+            [4,0,0,0,0,0,0,0],
+        ]
+    
+    //map code
+  
+    var water = 0;
+    var discord = 1;
+    var pinkie = 2;
+    var home = 3;
+    var celestia = 4;
+    var monster = 5;
+    
+    //size of each cell
+    var size = 64;
+    
+    //number of rows and columns
+    var ROWS = map.length;
+    var COLUMNS = map[0].length;
+    
+    //arrow key codes
+    var up = 38;
+    var down = 40;
+    var right = 39;
+    var left = 37;
+    
+    //automatic start position
+    var celestiaRow;
+    var celestiaColumn;
+    var monsterRow;
+    var monsterColumn;
+    
+    for(var row = 0; row < ROWS; row++)
+        {
+            for(var column = 0; column < COLUMNS; column++)
+                {
+                    if(gameObject[row][column] === celestia)
+                    {
+                        celestiaRow = row;
+                        celestiaColumn = column;
+                     }
+                    if(gameObject[row][column] === monster)
+                    {
+                          monsterRow = row;
+                          monsterColumn = column;
+                    }
+                    
+                }
+        }
+    //game variables
+    var food = 10;
+    var power = 10;
+    var experience = 0;
+    var gameMessage = "Use arrow keys to fly your way home.";
+    
+    render();
+    
+function keydownHandler(event)
+{
+//    console.log('Keypress: ' + event.keyCode);
+  switch(event.keyCode)
+  {
+    case up:
+      
+      //Find out if the ship's move will
+      //be within the playing field
+	    if(celestiaRow > 0)
+	    {
+	      //If it is, clear the ship's current cell
+	      gameObject[celestiaRow][celestiaColumn] = 0;
+	      
+	      //Subract 1 from the ship's row
+	      //to move it up one row on the map
+	      celestiaRow--;
+	      
+	      //Apply the ship's new updated position to the array
+	      gameObject[celestiaRow][celestiaColumn] = celestia;
+	    }
+	    break;
+	  
+	  case down:
+	    if(celestiaRow < ROWS - 1)
+	    {
+	      gameObject[celestiaRow][celestiaColumn] = 0;
+	      celestiaRow++;
+	      gameObject[celestiaRow][celestiaColumn] = celestia;
+	    }
+	    break;
+	    
+	  case left:
+	    if(celestiaColumn > 0)
+	    {
+	      gameObject[celestiaRow][celestiaColumn] = 0;
+	      celestiaColumn--;
+	      gameObject[celestiaRow][celestiaColumn] = celestia;
+	    }
+	    break;  
+	    
+	  case right:
+	    if(celestiaColumn < COLUMNS - 1)
+	    {
+	      gameObject[celestiaRow][celestiaColumn] = 0 ;
+	      celestiaColumn++;
+	      gameObject[celestiaRow][celestiaColumn] = celestia;
+	    }
+	    break; 
+  }
+        
+    //find out what kind of cell celestia is on
+    switch(map[celestiaRow][celestiaColumn])
+        {
+            case water:
+                gameMessage = "You fly over the sea.";
+            break;
+                
+            case discord:
+                fight();
+                break;
+            
+            case pinkie:
+                trade();
+                break;
+            case home:
+                endGame();
+                break;
+        }
+    //move monster
+    moveMonster();
+    
+    //find out is celestia is touching the monster
+    if(gameObject[celestiaRow][celestiaColumn] === monster)
+    {
+        endGame();
+    }
+    
+    //subtract some food each turn
+    food--;
+    
+    //find out of celestia run out of food or power
+    if(food <= 0 || power <= 0)
+        {
+            endGame();
+        }
+    //render the game
+    render();
+}
+    function moveMonster()
+    {
+        //4 possible directions that the monster can move
+        var up = 1;
+        var down = 2;
+        var left = 3;
+        var right = 4;
+        
+        //an array to store valid directions the monster
+        //can move
+        var validDirections = [];
+        
+        //final direction that the monster will move in
+        var direction = undefined;
+        
+        //find out what things are in cells that surroun the monster,
+        
+        if(monsterRow > 0)
+        {
+            var thingsAbove = map[monsterRow - 1][monsterColumn];
+            if(thingsAbove === water)
+            {
+                validDirections.push(up)
+            }
+        }
+        if(monsterRow < ROWS - 1)
+        {
+            var thingsBelow = map[monsterRow + 1][monsterColumn];
+            if(thingsBelow === water)
+            {
+                validDirections.push(down);
+            }
+            if (monsterColumn > 0)
+            {
+                var thingsToTheLeft = map[monsterRow][monsterColumn - 1];
+                if(thingsToTheLeft === water)
+                {
+                    validDirections.push(left);
+                }
+            }
+            if(monsterColumn < COLUMNS - 1)
+            {
+                var thingsToTheRight = map[monsterRow][monsterColumn + 1];
+                if(thingsToTheRight === water)
+                {
+                    validDirections.push(right);
+                    
+                }
+            }
+            
+            //valid direction array now contains 0 to 5 directions
+            //if valid direction was found randomly choose on of the 
+            //possible direction
+            if(validDirections.length !== 0)
+            {
+                var randomNumber = Math.floor(Math.random() *
+                validDirections.length);
+                direction = validDirections[randomNumber];
+            }
+            
+            //move the monster in the choosen direction
+            switch(direction)
+            {
+                case up:
+                    //clear the monsters current cell
+                    gameObject[monsterRow][monsterColumn] = 0;
+                    monsterRow--;
+                    gameObject[monsterRow][monsterColumn] = monster;
+                    break;
+                case down:
+                    gameObject[monsterRow][monsterColumn] = 0;
+                    monsterRow++;
+                    gameObject[monsterRow][monsterColumn] = monster;
+                case left:
+                    gameObject[monsterRow][monsterColumn] = 0;
+                    monsterRow++;
+                    gameObject[monsterRow][monsterColumn] = monster;
+                    break;
+                case right:
+                    gameObject[monsterRow][monsterColumn] = 0;
+                    monsterColumn--;
+                    gameObject[monsterRow][monsterColumn] = monster;
+            }
+        }
+        
+    }
+    function trade()
+    {
+        //figure out how much food 
+        var homeFood = experience + power;
+        var cost = Math.ceil(Math.random() * homeFood);
+        
+        //let player buy food if there is enough power
+        if (power > cost)
+        {
+            food += homeFood;
+            power -= cost;
+            experience += 2;
+            
+            gameMessage
+                = "You buy" + homeFood + "hay"
+                + "for" +power+ "power";
+         }
+        else
+            {
+                //tell the player if they dont have enough power
+                experience += 1;
+                gameMessage = "You don't have enough power to buy food."
+            }
+    }
+    
+    function fight()
+    {
+        //celestias strenght
+        var celestiaStrength = Math.ceil((food + power) / 2);
+        
+        //a random number between 1 and celestias strength
+        var discordStrength = Math.ceil(Math.random() * celestiaStrength * 2);
+        
+        if(discordStrength > celestiaStrength)
+        {
+            //discord steals from celestia
+            var stolenPower = Math.round(discordStrength / 2);
+            power -= stolenPower;
+            
+            //give the plaer some experience for trying
+            experience += 1;
+            
+            //update the game message
+            gameMessage
+            ="You fought and lost" +stolenPower+ "power."
+            + "Celestia's strength: " + celestiaStrength
+            + "Discord's strength: " + discordStrength;
+        }
+        
+        else
+        {
+            //You win discords power
+            var discordPower = Math.round(discordPower / 2);
+            power += discordPower;
+            
+            //add some experience
+            experience += 2;
+            
+            //update the game message
+            gameMessage
+            +"You fought and won" +discordPower+ "discords power"
+            + "Celestia's stength: " +celestiaStrength
+            + "Discord's strength: " + discordStrength;
+        }
+    }
+    
+function endGame()
+    {
+        if(map[celestiaRow][celestiaColumn] === home)
+        {
+            //calculate the score
+            var score = food + power + experience;
+            
+            //display the game message
+            gameMessage
+            ="You made it home Alive! " + "Final score: " + score;
+        }
+        else if(gameObject[celestiaRow][celestiaColumn] === monster)
+        {
+            gameMessage
+            = "You have been eaten by the monster!";
+        }
+        else
+            {
+                //display game message if the player has 
+                //run out of power and food
+                
+                if(power <= 0)
+                {
+                    gameMessage += "You ran out of power.";
+                }
+                else
+                {
+                    gameMessage += "You ran out of food.";
+                }
+                
+                gameMessage 
+                += "You have fell to the ground."
+            }
+        //remove keyboard listener
+        window.removeEventListener("keydown", keydownHandler, false);
+    }
+
+function render()
+{
+  //Clear the stage of img tag cells
+  //from the previous turn
+  
+  if(main.hasChildNodes())
+  {
+    for(var i = 0; i < ROWS * COLUMNS; i++) 
+    {	 
+      main.removeChild(main.firstChild);
+    }
+  }
+  
+  //Render the game by looping through the map arrays
+  for(var row = 0; row < ROWS; row++) 
+  {	
+    for(var column = 0; column < COLUMNS; column++) 
+    { 
+      //Create a img tag called cell
+      var cell = document.createElement("img");
+
+      //Set it's CSS class to "cell"
+      cell.setAttribute("class", "cell");
+
+      //Add the img tag to the <div id="stage"> tag
+      main.appendChild(cell);
+
+      //Find the correct image for this map cell
+      switch(map[row][column])
+      {
+        case water:
+          cell.src = "images/water.jpg";
+          break;
+
+        case discord:
+          cell.src = "images/discord.jpg";
+          break; 
+
+        case home:
+          cell.src = "images/home.jpg";
+          break; 
+
+        case pinkie:
+          cell.src = "images/pinkie.jpg";
+          break;   
+      } 
+        
+        //add celestia to gameObject array
+        switch (gameObject[row][column])
+            {
+                case celestia:
+                    cell.src = "images/celestia.jpg";
+                    break;
+                case monster:
+                    cell.src = "images/monster.png";
+                    break;
+            }
+  
+      //Position the cell 
+      cell.style.top = row * size + "px";
+      cell.style.left = column * size + "px";
+    }
+  }
+    //display game message
+    output.innerHTML = gameMessage;
+    
+    //display the players food, power and experience
+    output.innerHTML
+        += "<br>Power: " + power + ", Food: "
+        + food + ", Experience: " + experience;
+}
+    
+    
+</script>
+</body>
+</html>
